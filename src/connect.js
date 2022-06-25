@@ -12,9 +12,9 @@ const doThis = async () => {
     // this returns the provider, or null if it wasn't detected
     const provider = await detectEthereumProvider();
 
-    function showConnectMetamaskPopup() {
+    // function showConnectMetamaskPopup() {
         // window.elementorProFrontend.modules.popup.showPopup({ id: 1323 })
-    }
+    // }
 
     if (provider) {
         startApp(provider); // Initialize your app
@@ -86,7 +86,7 @@ const doThis = async () => {
             currentAccount = accounts[0];
             let checkingDB = new Event('checking-db');
             window.dispatchEvent(checkingDB);
-            fetch('/scripts/api.php', {
+            fetch('/scripts/check.php', {
                 method: 'POST', // or 'PUT'
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,14 +94,10 @@ const doThis = async () => {
                 body: JSON.stringify({ account: currentAccount }),
             }).then(r => {
                 return r.json()
-            }).then(r => {                
-                let connected = new CustomEvent('connected', { detail: r });
+            }).then(r => {
+                let connected = new CustomEvent('connected', { detail: r, account: currentAccount });
                 window.dispatchEvent(connected);
             })
-            // Do any other work!
-            // connectBtn.style.display = 'none';
-            // connectBtn.classList.add('connected')
-            // connectBtn.innerHTML = 'Connected'
         }
     }
 

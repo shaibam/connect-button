@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
+import { requestAmount } from './APIs/requestAmout';
 import './App.css';
+import style from './style.module.css';
 import './connect';
+import NativeSelectDemo from './NativeSelectDemo/NativeSelectDemo';
 
 function App() {
   const [status, setStatus] = useState('pending')
+  const [available, setAvailable] = useState(0)
+  const [account, setAccount] = useState(null)
+  const [metaDatas, setMetaDatas] = useState([]);
 
   useEffect(() => {
     window.addEventListener('metamask-missing', () => {
@@ -17,6 +23,8 @@ function App() {
     })
     window.addEventListener('connected', ({ detail }) => {
       console.log({ detail });
+      setAccount(parseInt(detail.account));
+      setAvailable(parseInt(detail.available));
       setStatus('connected')
     })
 
@@ -26,9 +34,17 @@ function App() {
     window.flatusConnectToMetamask();
   }
 
-  const handleMint = () => {
-    console.log('go mint');
+  const handleMintAmountChange = (amount) => {
+    requestAmount(account, amount)
+      .then(({ metaDatas }) => {
+        setMetaDatas(metaDatas)
+      })
   }
+
+  const handleMint = () => {
+    console.log('go mint',metaDatas);
+  }
+
 
   if (status === 'pending') return (<span>Loading...</span>);
 
@@ -40,7 +56,16 @@ function App() {
         status === 'checking-db' ?
           <span>Checking DB...</span>
           : status === 'connected' ?
-            <><button onClick={handleMint}>Mint</button></>
+            <div>
+              <NativeSelectDemo
+                available={available}
+                onChange={handleMintAmountChange}
+              />
+              <button
+                className={style.mintButton}
+                disabled={!metaDatas.length}
+                onClick={handleMint}>Mint</button>
+            </div>
             : null}
     </div>
   );

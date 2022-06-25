@@ -1,0 +1,7 @@
+.mintButton {
+
+}
+
+.mintButton:disabled {
+    opacity: 0.5;
+}
