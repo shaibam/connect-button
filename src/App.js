@@ -23,11 +23,10 @@ function App() {
     })
     window.addEventListener('connected', ({ detail }) => {
       console.log({ detail });
-      setAccount(parseInt(detail.account));
+      setAccount(detail.account);
       setAvailable(parseInt(detail.available));
       setStatus('connected')
     })
-
   }, [])
 
   const handleConnect = () => {
@@ -36,13 +35,13 @@ function App() {
 
   const handleMintAmountChange = (amount) => {
     requestAmount(account, amount)
-      .then(({ metaDatas }) => {
+      .then((metaDatas) => {
         setMetaDatas(metaDatas)
       })
   }
 
   const handleMint = () => {
-    console.log('go mint',metaDatas);
+    console.log('go mint', metaDatas);
   }
 
 

@@ -7,5 +7,8 @@ export function requestAmount(account, amount) {
         body: JSON.stringify({ account, amount }),
     }).then(r => {
         return r.json()
+    }).then(r=>{
+        const data = JSON.parse(r.data);
+        return data;
     })
 }

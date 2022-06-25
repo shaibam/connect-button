@@ -13,7 +13,7 @@ const doThis = async () => {
     const provider = await detectEthereumProvider();
 
     // function showConnectMetamaskPopup() {
-        // window.elementorProFrontend.modules.popup.showPopup({ id: 1323 })
+    // window.elementorProFrontend.modules.popup.showPopup({ id: 1323 })
     // }
 
     if (provider) {
@@ -95,7 +95,9 @@ const doThis = async () => {
             }).then(r => {
                 return r.json()
             }).then(r => {
-                let connected = new CustomEvent('connected', { detail: r, account: currentAccount });
+                const detail = JSON.parse(r.data);
+                detail.account = currentAccount;
+                let connected = new CustomEvent('connected', { detail });
                 window.dispatchEvent(connected);
             })
         }
