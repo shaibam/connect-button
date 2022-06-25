@@ -20,15 +20,16 @@ export default function NativeSelectDemo({ available = 0, onChange = () => { } }
             Mint amount
           </InputLabel>
           <NativeSelect
-            defaultValue={1}
+            defaultValue={0}
             inputProps={{
               name: 'mint',
               id: 'uncontrolled-native',
             }}
             onChange={handleChange}
           >
+            <option value={0}>{0}</option>
             {_.map([...Array(available).keys()], (v) => {
-              return <option key={'option' + v} value={v}>{v}</option>
+              return <option key={'option' + (v+1)} value={v+1}>{v+1}</option>
             })}
           </NativeSelect>
         </FormControl>
