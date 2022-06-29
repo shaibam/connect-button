@@ -4,6 +4,7 @@ import './App.css';
 import style from './style.module.css';
 import './connect';
 import NativeSelectDemo from './NativeSelectDemo/NativeSelectDemo';
+import { sendMoney } from './js/sendMoney';
 
 function App() {
   const [status, setStatus] = useState('pending')
@@ -42,8 +43,8 @@ function App() {
 
   const handleMint = () => {
     console.log('go mint', metaDatas);
+    sendMoney(account, metaDatas[0].url)
   }
-
 
   if (status === 'pending') return (<span>Loading...</span>);
 
