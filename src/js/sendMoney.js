@@ -1,8 +1,7 @@
-// import { contractAddress, contract, API_URL } from "./mintNFT";
-const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
+import {createAlchemyWeb3}  from "@alch/alchemy-web3";
+import contract from "../artifacts/contracts/MyNFT.sol/MyNFT.json";
 const API_URL = "https://eth-rinkeby.alchemyapi.io/v2/iGZ9mxR715CGKzyJMTT-QVQGC_cl86Az";
-export const contract = require("../artifacts/contracts/MyNFT.sol/MyNFT.json");
-export const contractAddress = "0x3e0F95890337499C4d5d2d427Ee78581418eFcf2";
+const contractAddress = "0x3e0F95890337499C4d5d2d427Ee78581418eFcf2";
 const web3 = createAlchemyWeb3(API_URL);
 
 export const sendMoney = async (buyerId, mintURI) => {
@@ -21,4 +20,5 @@ export const sendMoney = async (buyerId, mintURI) => {
     const signedTx = await web3.eth.sendTransaction(tx);
     // const transactionReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction); //todo!!!
     console.log({ signedTx })
+    return signedTx
 };

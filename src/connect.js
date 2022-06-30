@@ -3,6 +3,8 @@
 /*****************************************/
 
 import detectEthereumProvider from '@metamask/detect-provider';
+import { check } from './APIs/check';
+
 const doThis = async () => {
     // const connectBtn = document.getElementById('connectButton');
     // connectBtn.classList.remove('disabled')
@@ -86,20 +88,7 @@ const doThis = async () => {
             currentAccount = accounts[0];
             let checkingDB = new Event('checking-db');
             window.dispatchEvent(checkingDB);
-            fetch('/scripts/check.php', {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ account: currentAccount }),
-            }).then(r => {
-                return r.json()
-            }).then(r => {
-                const detail = JSON.parse(r.data);
-                detail.account = currentAccount;
-                let connected = new CustomEvent('connected', { detail });
-                window.dispatchEvent(connected);
-            })
+            check(currentAccount);
         }
     }
 

@@ -5,12 +5,14 @@ import style from './style.module.css';
 import './connect';
 import NativeSelectDemo from './NativeSelectDemo/NativeSelectDemo';
 import { sendMoney } from './js/sendMoney';
+import { saveTransaction } from './APIs/saveTransaction';
 
 function App() {
   const [status, setStatus] = useState('pending')
   const [available, setAvailable] = useState(0)
   const [account, setAccount] = useState(null)
   const [metaDatas, setMetaDatas] = useState([]);
+  const [transactionHash, setTransactionHash] = useState('');
 
   useEffect(() => {
     window.addEventListener('metamask-missing', () => {
@@ -41,9 +43,18 @@ function App() {
       })
   }
 
-  const handleMint = () => {
+  const handleMint = async () => {
     console.log('go mint', metaDatas);
-    sendMoney(account, metaDatas[0].url)
+    setStatus('minting')
+    const signedTx = await sendMoney(account, metaDatas[0].url)
+    if (!signedTx?.transactionHash) {
+      alert('Transaction failed')
+    } else {
+      const result = await saveTransaction(metaDatas[0].url, signedTx?.transactionHash);
+      console.log(result);
+      setStatus('minted');
+      setTransactionHash(signedTx?.transactionHash);
+    }
   }
 
   if (status === 'pending') return (<span>Loading...</span>);
@@ -66,7 +77,15 @@ function App() {
                 disabled={!metaDatas.length}
                 onClick={handleMint}>Mint</button>
             </div>
-            : null}
+            : status === 'minting' ?
+              <span>Minting.... please wait</span>
+              : status === 'minted' ?
+                <>
+                  <span>Minted {transactionHash} </span>
+                  <a href='https://testnets.opensea.io/'>Check your account at Opesea (rinkeby)</a>
+                </>
+                : null
+      }
     </div>
   );
 }
